@@ -1,21 +1,39 @@
+import { useState } from 'react';
 import './App.css'
-import { Plactice1 } from './plactices/Plactice1'
-import { Plactice2 } from './plactices/Plactice2'
-import { Plactice3 } from './plactices/plactice3'
-import { Plactice4 } from './plactices/plactice4'
+import axios from 'axios';
+import { Todo } from './Todo';
+import { TodoType } from './types/todo';
 
 function App() {
+  const [todos,setTodos] = useState<Array<TodoType>>([])
+
+
+  const onClickFetchData = () => {
+    axios.get<Array<TodoType>>('https://jsonplaceholder.typicode.com/todos').then((res)=>{
+      setTodos(res.data);
+    });
+  };
 
   return (
     <>
-    <h1>hello </h1>
-    <Plactice1/>
-    <Plactice2/>
-    <Plactice3/>
-    <Plactice4/>
+
+      <button onClick={onClickFetchData}>データ取得</button>
+      {todos.map((todo)=>(
+        <Todo key = {todo.id}
+              // id ={todo.id}
+              title={todo.title}
+              userId={todo.userId}
+              completed ={todo.completed}
+              />
+
+      ))}
 
     </>
-  )
+
+
+
+
+  );
 }
 
 export default App
